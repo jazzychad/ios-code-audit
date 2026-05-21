@@ -13,6 +13,8 @@ All three briefs enforce the same per-finding format so synthesis is mechanical:
 - Severity: Critical | High | Medium | Low
 ```
 
+> **Note on numbering.** Agents return findings *without* `N.M` subsection numbers — the synthesis step in `SKILL.md` Step 6 assigns them when laying findings into the final `CODE_AUDIT.md`. Do not ask agents to invent numbers (you'd get collisions across the three agents), but the synthesizer MUST add the `N.M` prefix to every heading in the final report. See the numbering rules in `report-template.md`.
+
 ---
 
 ## Agent A — Concurrency & API modernity

@@ -1,6 +1,14 @@
 # CODE_AUDIT.md Skeleton
 
-Copy this structure into `<repo-root>/CODE_AUDIT.md` and fill in. Section numbering helps the user reference findings (e.g., "let's fix §5.1 first").
+Copy this structure into `<repo-root>/CODE_AUDIT.md` and fill in.
+
+> ## ⚠️ Numbering is mandatory
+>
+> Every top-level section MUST render as `## 1. Executive summary`, `## 2. Quick wins`, … `## 12. Verification` — with the number in the heading text. Every finding MUST render as `### N.M <title>` (e.g., `### 5.1 Force-unwrap on Bundle.main.url`).
+>
+> The numbers are the report's primary interface — users open issues like "fix §5.4" and the report is unusable without them. **Do not emit headings as `### <title>` or `## Executive summary` without the leading number.** If a section has no findings, keep its numbered heading and write `_No findings._` underneath.
+>
+> Numbers are stable: when revising, leave removed findings as `### 5.4 _REMOVED: <reason>_` rather than renumbering survivors.
 
 ```markdown
 # <App Name> Code Audit
@@ -46,7 +54,7 @@ These deliver outsized value relative to effort and have no architectural ripple
 - **Action:** <recommendation; no code>
 - **Severity:** Critical | High | Medium | Low
 
-### 3.2 <…>
+### 3.2 <next finding — keep the `3.2`, `3.3`, … numbering>
 
 ---
 
@@ -54,33 +62,43 @@ These deliver outsized value relative to effort and have no architectural ripple
 
 (Deprecations, iOS-target+ replacements available.)
 
-### 4.1 <…>
+### 4.1 <title>
+
+### 4.2 <…>
 
 ---
 
 ## 5. Bugs / logic errors
 
-### 5.1 <…>
+### 5.1 <title>
+
+### 5.2 <…>
 
 ---
 
 ## 6. Security
 
-### 6.1 <…>
+### 6.1 <title>
+
+### 6.2 <…>
 
 ---
 
 ## 7. Performance
 
-### 7.1 <…>
+### 7.1 <title>
+
+### 7.2 <…>
 
 ---
 
 ## 8. SwiftUI / UI
 
-(If the project uses SwiftUI; otherwise omit or replace with "UIKit / AppKit".)
+(If the project uses SwiftUI; otherwise omit or replace with "UIKit / AppKit" — but keep the `## 8.` number.)
 
-### 8.1 <…>
+### 8.1 <title>
+
+### 8.2 <…>
 
 ---
 
@@ -142,19 +160,20 @@ Patterns worth applying repo-wide rather than one finding at a time:
 
 Spot-check pattern: open Xcode, command-click the `path:line` reference in this report — it should land on the cited line. Each Critical / High finding has an exact line range, not "scattered throughout."
 
-For the Critical items, here are the lines that prove the claim:
+For the Critical items, here are the lines that prove the claim. **Replace each `§N.M` below with the actual subsection number of the finding you're verifying — do not leave the placeholder in the rendered report.**
 
-- **§<N.M>** — open `path`, lines `start-end`. <one-sentence verification — what to look at>.
-- **§<N.M>** — open `path`, line `N`. <…>.
-- **§<N.M>** — …
+- **§5.1** — open `path`, lines `42-47`. <one-sentence verification — what to look at>.
+- **§3.2** — open `path`, line `118`. <…>.
+- **§6.1** — …
 
 If any finding doesn't reproduce when you visit the line, ping me with the specific reference and I'll re-investigate.
 ```
 
 ## Notes on filling the template
 
-- **Numbered subsections (3.1, 3.2, …) survive edits.** When you delete a finding, leave the number — note "REMOVED: <reason>" — so the user's notes/issues that reference "§5.4" don't shift.
-- **Executive summary is curated, not algorithmic.** Pick the 10 highest-impact items across all categories; some Critical items may not appear here if they're already obvious from another finding.
+- **Numbering is non-negotiable.** Every `## N. <Title>` heading keeps its number in the rendered report, and every finding is `### N.M <title>`. The numbers are the user's primary reference scheme — a report without them is broken. Do a final pass before delivery: skim the rendered Markdown and confirm no heading is missing its prefix.
+- **Numbered subsections (3.1, 3.2, …) survive edits.** When you delete a finding, leave the number — note "_REMOVED: <reason>_" — so the user's notes/issues that reference "§5.4" don't shift.
+- **Executive summary is curated, not algorithmic.** Pick the 10 highest-impact items across all categories; some Critical items may not appear here if they're already obvious from another finding. Each entry should reference the underlying finding by §N.M.
 - **Cross-cutting recommendations** is where you connect dots. If three separate findings all point at "CaptureState should be @MainActor," call that out as one repo-wide change.
 - **The "What was NOT audited" section is mandatory.** It sets the user's expectations and prevents "you missed X" follow-ups.
 - **Verification section is the trust contract.** For each Critical, name the literal lines the reader can open to confirm the claim. If you can't, the finding probably isn't Critical.

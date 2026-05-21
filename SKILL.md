@@ -90,9 +90,21 @@ This step has caught hallucinated severity in prior runs. Demote or drop items t
 
 ### Step 6 — Synthesize `CODE_AUDIT.md`
 
-Use the skeleton in `references/report-template.md`. Sections, in order:
+Use the skeleton in `references/report-template.md`.
 
-1. **Executive summary** — 5-10 highest-impact findings, one line each, with severity tag and category.
+**Mandatory: the rendered report must include section numbers in every heading.** This is not cosmetic — it is the report's primary interface. Users file issues like "fix §5.4" and "is §3.1 done?", and they cannot do that if headings are unnumbered. **Generating an unnumbered report is a defect, not a stylistic choice.** Reports without numbers will be rejected.
+
+The numbering rules:
+
+- **Top-level sections are numbered `## 1.` through `## 12.`** — exactly as listed below, in this order, even if a section has no findings (in which case write "_No findings._" under the heading rather than omitting the section).
+- **Every finding is a numbered subsection** of the form `### N.M <short title>` where `N` is the parent section number and `M` increments from 1. Example: `### 5.1 Force-unwrap on Bundle.main.url`, `### 5.2 Missing .limited Photos auth handling`. **Never** emit a finding as `### <short title>` without the `N.M` prefix.
+- **Numbers are stable across edits.** If a finding is removed during revision, leave the number and write `_REMOVED: <reason>_` as the body — do not renumber the surviving findings, or every external reference to "§5.4" breaks.
+- **Executive summary items** (§1) are an ordered list `1.`, `2.`, … referencing the underlying numbered finding (e.g., "**[Critical] Force-unwrap on Bundle.main.url** — §5.1 — `path:line`").
+- **Verification entries** (§12) reference findings by their subsection number, e.g., `- **§5.1** — open \`path\`, lines 42-47.`. Do not leave `<N.M>` placeholders from the template — fill them in.
+
+Top-level sections, in order:
+
+1. **Executive summary** — 5-10 highest-impact findings, one line each, with severity tag and a §N.M back-reference.
 2. **Quick wins** — ≤30-minute fixes (delete stale files, remove debug `print`s, fix unused-let warnings, add accessibility labels).
 3. **Concurrency**
 4. **API modernity** — deprecations, iOS-17+ replacements
@@ -105,10 +117,10 @@ Use the skeleton in `references/report-template.md`. Sections, in order:
 11. **What was NOT audited** — explicit out-of-scope list
 12. **Verification** — for each Critical/High, the exact lines that prove the claim
 
-Per-finding template:
+Per-finding template (note the leading `N.M`):
 
 ```markdown
-### <short title>
+### N.M <short title>
 - **Location:** `path/to/file.swift:LINE-LINE`
 - **What:** <observed problem in one sentence>
 - **Why:** <impact / why it matters>
@@ -127,6 +139,8 @@ Total length is comprehensive but scannable — aim for 50-100 findings. Group s
 
 ## Quality bar (final check before delivering)
 
+- [ ] **Every top-level section is numbered `## 1.` through `## 12.`** and every finding is a numbered subsection `### N.M <title>`. Skim the rendered report — if any heading is missing its number, fix it before delivering. Reports without numbers will be rejected as defective.
+- [ ] **Executive summary entries reference findings by §N.M**, and Verification entries do too — no literal `<N.M>` placeholders survived from the template.
 - [ ] Every Critical and High finding has an exact line range. No "throughout the codebase."
 - [ ] Concurrency findings cross-reference the actual Step-2 warning list.
 - [ ] At least 3-5 Critical findings have been spot-verified by opening the cited file.
