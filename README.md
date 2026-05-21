@@ -26,6 +26,13 @@ npx skills add https://github.com/jazzychad/ios-code-audit --skill ios-code-audi
 git clone https://github.com/jazzychad/ios-code-audit ~/.claude/skills/ios-code-audit
 ```
 
+### Option C - local project install
+
+In your local project directory:
+```bash
+mkdir -p .claude/skills && git clone https://github.com/jazzychad/ios-code-audit .claude/skills/ios-code-audit
+```
+
 Restart Claude Code (or run `/skills` to refresh) and the skill will appear as `ios-code-audit`.
 
 ---
