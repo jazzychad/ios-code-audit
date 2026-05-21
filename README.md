@@ -1,14 +1,32 @@
 # iOS Code Audit Skill
 
-A [Claude Code](https://claude.com/claude-code) skill that produces a navigable `CODE_AUDIT.md` for an iOS or macOS Swift project — bugs, dead code, Swift concurrency issues, deprecated APIs, security, performance, and SwiftUI quality — with every finding cited to `path/to/file.swift:LINE`.
+An agent skill that produces a navigable `CODE_AUDIT.md` for an iOS or macOS Swift project — bugs, dead code, Swift concurrency issues, deprecated APIs, security, performance, and SwiftUI quality — with every finding cited to `path/to/file.swift:LINE`.
 
-The skill is **read-only**: it never modifies your code. It produces one deliverable, `CODE_AUDIT.md`, written to the root of the audited repo.
+The skill is **READ-ONLY**: it never modifies your code. It produces one deliverable, `CODE_AUDIT.md`, written to the root of the audited repo.
 
 ---
 
 ## Who this is for
 
 iOS and macOS Swift developers who want a one-shot, severity-graded audit of a codebase — the kind of review you'd commission before a refactor sprint, a major release, or an acquisition. The output is a single Markdown report you can hand to a teammate, file as issues, or work through over a few PRs.
+
+---
+
+## Install
+
+### Option A — `npx skills add` (recommended)
+
+```bash
+npx skills add https://github.com/jazzychad/ios-code-audit --skill ios-code-audit
+```
+
+### Option B — manual clone
+
+```bash
+git clone https://github.com/jazzychad/ios-code-audit ~/.claude/skills/ios-code-audit
+```
+
+Restart Claude Code (or run `/skills` to refresh) and the skill will appear as `ios-code-audit`.
 
 ---
 
@@ -63,24 +81,6 @@ If your project is pure UIKit / AppKit, this dependency is optional — the Swif
 
 ---
 
-## Install
-
-### Option A — `npx skills add` (recommended)
-
-```bash
-npx skills add https://github.com/jazzychad/ios-code-audit --skill ios-code-audit
-```
-
-### Option B — manual clone
-
-```bash
-git clone https://github.com/jazzychad/ios-code-audit ~/.claude/skills/ios-code-audit
-```
-
-Restart Claude Code (or run `/skills` to refresh) and the skill will appear as `ios-code-audit`.
-
----
-
 ## Usage
 
 Open Claude Code in the root of your iOS/macOS Swift project and ask naturally — the skill activates on phrases like:
@@ -120,28 +120,11 @@ The full workflow, including the per-agent briefs and the report skeleton, lives
 
 ---
 
-## Repo layout
-
-```
-ios-code-audit/
-  SKILL.md                       # workflow, severity guide, operating rules
-  references/
-    agent-prompts.md             # three parallel-agent briefs
-    report-template.md           # CODE_AUDIT.md skeleton
-  README.md
-  CLAUDE.md                      # contributor guide for editing this skill
-  LICENSE
-```
-
-No `package.json` or build step — a Claude Code skill is just Markdown.
-
----
-
 ## What this skill does NOT cover
 
-- **Algorithmic correctness of Metal kernels / domain-specific code.** Obvious issues only.
+- **Algorithmic correctness of domain-specific code.** Obvious issues only.
 - **Build settings, scheme configuration, Xcode project structure** beyond what's visible in shared schemes.
-- **Third-party dependency internals.** SPM / CocoaPods packages are treated as black boxes.
+- **Third-party dependency internals.** SPM packages are treated as black boxes.
 - **Deep test coverage assessment.** Quick scan only.
 - **Localization wording.** The audit can flag untranslated strings but won't assess translation quality.
 - **Instruments / runtime profiling.** The skill identifies *potential* hot paths but doesn't run traces. For that, use [`swiftui-expert-skill`](https://github.com/AvdLee/SwiftUI-Agent-Skill) and its trace tooling separately.
